@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:rive/rive.dart';
 
 void main() {
   runApp(MyApp());
@@ -20,13 +22,33 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Artboard _riveArtboard;
+  @override
+  void initState() {
+    super.initState();
+    rootBundle.load('assets/star.riv').then((value) {
+      final file = RiveFile();
+      if (file.import(value)) {
+        final artbord = file.mainArtboard;
+        artbord.addController(SimpleAnimation('star_1'));
+        setState(() {
+          _riveArtboard = artbord;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Center(
-        child: Column(
-          children: <Widget>[],
+      body: Container(
+        child: Stack(
+          children: [
+            Image.asset('assets/star_bg_2.jpg'),
+            // Rive(
+            //   artboard: _riveArtboard,
+            // ),
+          ],
         ),
       ),
     );
