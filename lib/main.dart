@@ -26,6 +26,14 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   Artboard _riveArtboard;
+  final List starAnimations = [
+    AnimationPath.star_1_animation,
+    AnimationPath.star_2_animation,
+    AnimationPath.star_3_animation,
+    AnimationPath.star_4_animation,
+    AnimationPath.star_5_animation,
+  ];
+  String starAnimation = '';
   @override
   void initState() {
     super.initState();
@@ -33,6 +41,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final String shuffle = () {
+      starAnimations.shuffle();
+      return starAnimation = starAnimations[0];
+    }();
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -41,8 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
               final file = RiveFile();
               if (file.import(value)) {
                 final artbord = file.mainArtboard;
-                artbord.addController(
-                    SimpleAnimation(AnimationPath.star_1_animation));
+                artbord.addController(SimpleAnimation(shuffle));
                 setState(() {
                   _riveArtboard = artbord;
                 });
