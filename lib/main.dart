@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Counter App',
+      theme: ThemeData(fontFamily: 'Comfortaa'),
       home: MyHomePage(),
     );
   }
@@ -35,6 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
     AnimationPath.star_5_animation,
   ];
   String starAnimation = '';
+  int count = 0;
 
   @override
   void initState() {
@@ -59,6 +61,42 @@ class _MyHomePageState extends State<MyHomePage> {
       return starAnimation = starAnimations[0];
     }();
 
+    final starsAnimation = Positioned(
+      top: math.Random().nextInt(300).toDouble(),
+      left: math.Random().nextInt(300).toDouble(),
+      child: Container(
+        width: 200,
+        height: 200,
+        child: Visibility(
+          visible: _starArtboard != null,
+          child: Rive(artboard: _starArtboard),
+        ),
+      ),
+    );
+
+    final rabitAnimation = Container(
+      width: 350,
+      height: 350,
+      child: Visibility(
+        visible: _rabitArtboard != null,
+        child: Rive(artboard: _rabitArtboard),
+      ),
+    );
+
+    final countText = Align(
+        alignment: Alignment.center,
+        child: Opacity(
+          opacity: 0.1,
+          child: Text(
+            '$count',
+            style: TextStyle(
+              fontSize: 200.0,
+              color: Colors.white,
+              fontFamily: "Comfortaa",
+            ),
+          ),
+        ));
+
     return Scaffold(
       body: Stack(
         children: [
@@ -68,18 +106,8 @@ class _MyHomePageState extends State<MyHomePage> {
               fit: BoxFit.fill,
             ),
           ),
-          Positioned(
-            top: math.Random().nextInt(300).toDouble(),
-            left: math.Random().nextInt(300).toDouble(),
-            child: Container(
-              width: 200,
-              height: 200,
-              child: Visibility(
-                visible: _starArtboard != null,
-                child: Rive(artboard: _starArtboard),
-              ),
-            ),
-          ),
+          starsAnimation,
+          countText,
           Align(
             alignment: Alignment.bottomCenter,
             child: GestureDetector(
@@ -96,15 +124,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     }
                   });
                 });
+                count++;
               },
-              child: Container(
-                width: 350,
-                height: 350,
-                child: Visibility(
-                  visible: _rabitArtboard != null,
-                  child: Rive(artboard: _rabitArtboard),
-                ),
-              ),
+              onLongPress: () {
+                setState(() {
+                  count = 0;
+                });
+              },
+              child: rabitAnimation,
             ),
           ),
         ],
